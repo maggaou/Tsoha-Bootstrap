@@ -2,7 +2,7 @@
 
 Yleisiä linkkejä:
 
-* [Linkki sovellukseeni](https://magga.cs.helsinki.fi/tsoha)
+* [Linkki sovellukseeni](https://magga.users.cs.helsinki.fi/tsoha)
 * [Linkki dokumentaatiooni](https://github.com/maggaou/Tsoha-Bootstrap/blob/master/doc/dokumentaatio.pdf)
 
 ## Työn aihe
