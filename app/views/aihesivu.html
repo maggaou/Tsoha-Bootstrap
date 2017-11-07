@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Aihe : Muistilista</h1>
+<h4>Valittu: 10 kertaa</h4>
+
+<form>
+
+    <div class="form-group">
+        <label>Nimi</label>
+        <input type="text" class="form-control" value="Muistilista" readonly="">
+    </div>
+
+    <div class="form-group">
+        <label>Kuvaus</label>
+        <textarea class="form-control" readonly=""> Muistilistaan voi kirjata muistiin asioita.
+        </textarea>
+    </div>
+</form>
+<div class="form-group">
+    <button type="submit" class="btn btn-primary">Muokkaa</button>
+</div>
+{% endblock %}
