@@ -1,11 +1,15 @@
 # Tietokantasovelluksen esittelysivu
 
+Työn aiheena on aihevalintalistaus opintotöille. Käyttäjälle näytetään lista aiheista
+joista hän voi valita yhden. Aiheiden yhteydessä pidetään kirjaa siitä kuinka paljon
+kutakin aihetta on valittu. 
+
 Yleisiä linkkejä:
 
 * [Linkki sovellukseeni](https://magga.users.cs.helsinki.fi/tsoha)
 * [Linkki dokumentaatiooni](https://github.com/maggaou/Tsoha-Bootstrap/blob/master/doc/dokumentaatio.pdf)
 
-Käyttöliittymän hahmotelmat:
+## Käyttöliittymän hahmotelmat
 
 * [Linkki kategoria-sivulle](http://magga.users.cs.helsinki.fi/tsoha/kategoria)
 * [Linkki aiheiden listaukseen](http://magga.users.cs.helsinki.fi/tsoha/aiheet)
@@ -17,8 +21,3 @@ Käyttöliittymän hahmotelmat:
 * [Linkki kategorioiden listaukseen](http://magga.users.cs.helsinki.fi/tsoha/kategorialistaus)
 * [Linkki aiheen sivulle](http://magga.users.cs.helsinki.fi/tsoha/aihe)
 
-## Työn aihe
-
-Työn aiheena on aihevalintalistaus opintotöille. Käyttäjälle näytetään lista aiheista
-joista hän voi valita yhden. Aiheiden yhteydessä pidetään kirjaa siitä kuinka paljon
-kutakin aihetta on valittu. 
