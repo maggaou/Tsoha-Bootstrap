@@ -2,7 +2,7 @@
 
 Työn aiheena on aihevalintalistaus opintotöille. Käyttäjälle näytetään lista aiheista
 joista hän voi valita yhden. Aiheiden yhteydessä pidetään kirjaa siitä kuinka paljon
-kutakin aihetta on valittu.
+kutakin aihetta on valittu.   
 
 Yleisiä linkkejä:
 
