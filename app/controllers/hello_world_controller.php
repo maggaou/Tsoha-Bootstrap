@@ -11,14 +11,7 @@
       // Testaa koodiasi täällä
       View::make('kirjautuminen.html');
     }
-    public static function aihemuokkaus(){
-      // Testaa koodiasi täällä
-      View::make('aihe_muokkaus.html');
-    }
-    public static function aihelistaus(){
-      // Testaa koodiasi täällä
-      View::make('aihe_listaus.html');
-    }
+
     public static function kategoria(){
       // Testaa koodiasi täällä
       View::make('kategoriasivu.html');
@@ -39,10 +32,7 @@
       // Testaa koodiasi täällä
       View::make('kategoria_listaus.html');
     }
-    public static function aihe(){
-      // Testaa koodiasi täällä
-      View::make('aihesivu.html');
-    }
+
     
     public static function sandbox(){
         $aihe = Aihe::find(1);

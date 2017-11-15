@@ -44,5 +44,9 @@ class Aihe extends BaseModel {
         }
         return null;
     }
+    
+    public static function save($nimi, $kuvaus) {
+        
+    }
 
 }

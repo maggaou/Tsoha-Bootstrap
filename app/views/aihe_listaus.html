@@ -1,29 +1,31 @@
 {% extends "base.html" %}
 {% block content %}
-  <h1>Aiheita</h1>
+<h1>Aiheita</h1>
 
-  <p>
+<p>
     <a href="#" class="btn btn-success">Lisää aihe</a>
-  </p>
+</p>
 
-  <table class="table table-striped table-bordered">
+<table class="table table-striped table-bordered">
     <thead>
-      <tr>
-        <th>Nimi</th>
-        <th>Kategoria</th>
-        <th>Valittu</th>
-        <th></th>
-      </tr>
+        <tr>
+            <th>Nimi</th>
+            <th>Kategoria</th>
+            <th>Valittu</th>
+            <th></th>
+        </tr>
     </thead>
 
     <tbody>
-      <!-- Listataan pelit tähän -->
-      <tr>
-        <td><a href="#">Muistilista</a></td>
-        <td><a href="">Opiskelu</a></td>
-        <td>10</td>
-        <th><a class="btn btn-default btn-sm" href="#">Muokkaa</a></th>
-      </tr>
+        <!-- Listataan aiheet tähän -->
+        {% for aihe in aiheet %}
+        <tr>
+            <td><a href="{{base_path}}/aihe/{{aihe.aihe_id}}">{{aihe.nimi}}</td>
+            <td><a href="#">Aiheen kategoria</a></td>
+            <td>10</td>
+            <th><a class="btn btn-default btn-sm" href="{{base_path}}/aihemuokkaus/{{aihe.aihe_id}}">Muokkaa</a></th>
+        </tr>
+        {% endfor %}
     </tbody>
-  </table>
+</table>
 {% endblock %}
