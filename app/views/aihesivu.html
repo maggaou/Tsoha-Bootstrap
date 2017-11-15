@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
-{{viesti}}
+{% if viesti != null %}
+<div class="alert alert-success">{{viesti}}</div>
+{% endif %}
 <h1>Aihe : {{aihe.nimi}}</h1>
 <h4>Valittu: 10 kertaa</h4>
 
