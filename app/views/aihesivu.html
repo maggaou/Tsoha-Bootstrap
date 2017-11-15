@@ -12,11 +12,14 @@
 
     <div class="form-group">
         <label>Kuvaus</label>
-        <textarea class="form-control" readonly=""> {{aihe.kuvaus}}
+        <textarea class="form-control" readonly=""> 
+            {% if aihe.kuvaus == null %}
+                Ei vielä kuvausta. Lisää aiheelle kuvaus!
+            {% else %}
+                {{aihe.kuvaus}}
+            {% endif %}
         </textarea>
     </div>
 </form>
-<div class="form-group">
-    <button type="submit" class="btn btn-primary">Muokkaa</button>
-</div>
+<a class="btn btn-default btn-sm" href="{{base_path}}/aihemuokkaus/{{aihe.aihe_id}}">Muokkaa</a>
 {% endblock %}
