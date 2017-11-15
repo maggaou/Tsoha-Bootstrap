@@ -53,7 +53,7 @@ class Aihe extends BaseModel {
         // Haetaan kyselyn tuottama rivi, joka sisältää lisätyn rivin id-sarakkeen arvon
         $row = $query->fetch();
         // Asetetaan lisätyn rivin id-sarakkeen arvo oliomme id-attribuutin arvoksi
-        $this->id = $row['aihe_id'];
+        $this->aihe_id = $row['aihe_id'];
     }
 
 }

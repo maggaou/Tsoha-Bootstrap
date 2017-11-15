@@ -29,8 +29,7 @@ class AiheController extends BaseController {
         ));
         $aihe->save();
         
-        Redirect::to('/aihe/' . $aihe->aihe_id);
-
+        Redirect::to('/aihe/'.$aihe->aihe_id, array('lisaysok' => 'Aiheen lisäys onnistui!'));
     }
 
 }

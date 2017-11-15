@@ -2,7 +2,7 @@
 {% block content %}
   <h1>Muokkaa aihetta {{aihe.nimi}}</h1>
 
-  <form>
+  <form method="POST" action="{{base_path}}/aihemuokkaus/{{aihe.aihe_id}}">
 
     <div class="form-group">
       <label>Nimi</label>
