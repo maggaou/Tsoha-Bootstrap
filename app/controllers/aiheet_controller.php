@@ -7,9 +7,17 @@ class AiheController extends BaseController {
         View::make('aihe_listaus.html', array('aiheet' => $aiheet));
     }
 
-    public static function aihemuokkaus($aihe_id) {
+    public static function naytaAihemuokkaus($aihe_id) {
         $aihe = Aihe::find($aihe_id);
         View::make('aihe_muokkaus.html', array('aihe' => $aihe));
+    }
+    public static function aihemuokkaus($aihe_id) {
+        $aihe = Aihe::find($aihe_id);
+        $parametrit = $_POST;
+        $aihe->nimi = $parametrit['nimi'];
+        $aihe->kuvaus = $parametrit['kuvaus'];
+        $aihe->paivita();
+         Redirect::to('/aihe/'.$aihe->aihe_id, array('viesti' => 'Aiheen muokkaus onnistui!'));
     }
 
     public static function aihe($aihe_id) {
@@ -29,7 +37,7 @@ class AiheController extends BaseController {
         ));
         $aihe->save();
         
-        Redirect::to('/aihe/'.$aihe->aihe_id, array('lisaysok' => 'Aiheen lisäys onnistui!'));
+        Redirect::to('/aihe/'.$aihe->aihe_id, array('viesti' => 'Aiheen lisäys onnistui!'));
     }
 
 }

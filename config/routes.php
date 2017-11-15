@@ -12,6 +12,9 @@ $routes->get('/login', function() {
     HelloWorldController::login();
 });
 $routes->get('/aihemuokkaus/:aihe_id', function($aihe_id) {
+    AiheController::naytaAihemuokkaus($aihe_id);
+});
+$routes->post('/aihemuokkaus/:aihe_id', function($aihe_id) {
     AiheController::aihemuokkaus($aihe_id);
 });
 $routes->get('/aiheet', function() {

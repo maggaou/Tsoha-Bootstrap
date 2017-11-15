@@ -56,4 +56,10 @@ class Aihe extends BaseModel {
         $this->aihe_id = $row['aihe_id'];
     }
 
+    public function paivita() {
+        $query = DB::connection()->prepare('UPDATE Aihe SET nimi = :nimi, kuvaus = :kuvaus WHERE aihe_id = '.$this->aihe_id);
+        // Muistathan, että olion attribuuttiin pääse syntaksilla $this->attribuutin_nimi
+        $query->execute(array('nimi' => $this->nimi, 'kuvaus' => $this->kuvaus));
+    }
+
 }
