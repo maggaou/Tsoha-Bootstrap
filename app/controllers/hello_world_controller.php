@@ -20,10 +20,7 @@
       // Testaa koodiasi täällä
       View::make('kategoria_muokkaus.html');
     }
-    public static function aihelisays(){
-      // Testaa koodiasi täällä
-      View::make('aihe_lisays.html');
-    }
+
     public static function kategorialisays(){
       // Testaa koodiasi täällä
       View::make('kategoria_lisays.html');

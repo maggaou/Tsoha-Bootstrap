@@ -23,8 +23,11 @@ $routes->get('/kategoriamuokkaus', function() {
 $routes->get('/kategoria', function() {
     HelloWorldController::kategoria();
 });
+$routes->post('/aihelisays', function() {
+    AiheController::aihelisays();
+});
 $routes->get('/aihelisays', function() {
-    HelloWorldController::aihelisays();
+    AiheController::naytaAihelisays();
 });
 $routes->get('/kategorialisays', function() {
     HelloWorldController::kategorialisays();
