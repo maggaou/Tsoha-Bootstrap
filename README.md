@@ -1,3 +1,4 @@
+# Vertaisarvioinnin voi tehdä viikolta 3!
 # Tietokantasovelluksen esittelysivu
 
 Työn aiheena on aihevalintalistaus opintotöille. Käyttäjälle näytetään lista aiheista
