@@ -4,7 +4,7 @@
 
     public static function say_hi(){
     	return 'Hello World!';
-	    $aihe = Aihe::find(1);
+	    $aihe = Aihe::findById(1);
     	$aiheet = Aihe::all();
 		// Kint-luokan dump-metodi tulostaa muuttujan arvon
 		Kint::dump($games);

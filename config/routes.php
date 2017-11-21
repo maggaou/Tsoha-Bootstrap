@@ -41,3 +41,6 @@ $routes->get('/kategorialistaus', function() {
 $routes->get('/aihe/:aihe_id', function($aihe_id) {
     AiheController::aihe($aihe_id);
 });
+$routes->get('/aihe/:aihe_id/poista', function($aihe_id) {
+    AiheController::poista($aihe_id);
+});
