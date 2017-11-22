@@ -1,4 +1,7 @@
-# Vertaisarvioinnin voi tehdä viikolta 3!
+# Viikon 4 arviointi
+* Kirjautuminen: [https://magga.users.cs.helsinki.fi/tsoha/login](https://magga.users.cs.helsinki.fi/tsoha/login)
+* Tunnus/salasana: jussi/jussi1234
+* Ilman tunnusta: [https://magga.users.cs.helsinki.fi/tsoha/aiheet](https://magga.users.cs.helsinki.fi/tsoha/aiheet)
 # Tietokantasovelluksen esittelysivu
 
 Työn aiheena on aihevalintalistaus opintotöille. Käyttäjälle näytetään lista aiheista
