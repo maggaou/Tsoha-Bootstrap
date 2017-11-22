@@ -32,11 +32,8 @@ class HelloWorldController extends BaseController {
     }
 
     public static function sandbox() {
-        $aihe = new Aihe(array(
-            'nimi' => '2',
-            'kuvaus' => '1'
-        ));
-        $errors = $aihe->errors();
+        $user = User::find(1);
+        Kint::dump($user);
     }
 
 }

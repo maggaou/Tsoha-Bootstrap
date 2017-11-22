@@ -4,13 +4,16 @@ $routes->get('/', function() {
     HelloWorldController::index();
 });
 
+$routes->post('/login', function() {
+    
+    UserController::handle_login();
+});
+
+
 $routes->get('/hiekkalaatikko', function() {
     HelloWorldController::sandbox();
 });
 
-$routes->get('/login', function() {
-    HelloWorldController::login();
-});
 $routes->get('/aihemuokkaus/:aihe_id', function($aihe_id) {
     AiheController::naytaAihemuokkaus($aihe_id);
 });
@@ -43,4 +46,11 @@ $routes->get('/aihe/:aihe_id', function($aihe_id) {
 });
 $routes->get('/aihe/:aihe_id/poista', function($aihe_id) {
     AiheController::poista($aihe_id);
+});
+$routes->get('/login', function() {
+    UserController::login();
+});
+$routes->post('/login', function() {
+    
+    UserController::handle_login();
 });

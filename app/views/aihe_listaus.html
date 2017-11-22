@@ -12,7 +12,6 @@
             <th>Nimi</th>
             <th>Kategoria</th>
             <th>Valittu</th>
-            <th></th>
         </tr>
     </thead>
 
@@ -23,7 +22,6 @@
             <td><a href="{{base_path}}/aihe/{{aihe.aihe_id}}">{{aihe.nimi}}</td>
             <td><a href="#">Aiheen kategoria</a></td>
             <td>10</td>
-            <th><a class="btn btn-default btn-sm" href="{{base_path}}/aihemuokkaus/{{aihe.aihe_id}}">Muokkaa</a></th>
         </tr>
         {% endfor %}
     </tbody>

@@ -8,13 +8,19 @@
 <h4>Kuvaus</h4>
 <p>
     {% if aihe.kuvaus == null %}
-    <i>Ei vielä kuvausta. Lisää aiheelle kuvaus!</i>
+    <i>Ei vielä kuvausta. 
+        {% if user_logged_in.asema == 'vastuuhenkilö' %}
+        Lisää aiheelle kuvaus!
+        {% endif %}
+    </i>
     {% else %}
     {{aihe.kuvaus}}
     {% endif %}
 </p>
+{% if user_logged_in.asema == 'vastuuhenkilö' %}
 <a class="btn btn-default btn-sm" href="{{base_path}}/aihemuokkaus/{{aihe.aihe_id}}" 
    title="Muokkaa kuvausta tai aiheen nimeä">Muokkaa</a>
+{% endif %}
 <br/>
 <br/>
 <br/>

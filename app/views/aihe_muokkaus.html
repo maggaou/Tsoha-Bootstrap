@@ -16,6 +16,12 @@
     <div class="form-group">
         <button type="submit" class="btn btn-primary">Tallenna muokkaus</button>
     </div>
+
+</form>
+<form method="GET" action="{{base_path}}/aihe/{{aihe.aihe_id}}">
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Peru muokkaus</button>
+    </div>
 </form>
 
 <form method="GET" action="{{base_path}}/aihe/{{aihe.aihe_id}}/poista" style="display: inline-block;">
