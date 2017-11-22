@@ -2,24 +2,21 @@
 {% block content %}
 <h1>Aihe : {{aihe.nimi}}</h1>
 <h4>Valittu: 10 kertaa</h4>
+</br>
+</br>
 
-<form>
-
-    <div class="form-group">
-        <label>Nimi</label>
-        <input type="text" class="form-control" value="{{aihe.nimi}}" readonly="">
-    </div>
-
-    <div class="form-group">
-        <label>Kuvaus</label>
-        <textarea class="form-control" readonly=""> 
-            {% if aihe.kuvaus == null %}
-                Ei vielä kuvausta. Lisää aiheelle kuvaus!
-            {% else %}
-                {{aihe.kuvaus}}
-            {% endif %}
-        </textarea>
-    </div>
-</form>
-<a class="btn btn-default btn-sm" href="{{base_path}}/aihemuokkaus/{{aihe.aihe_id}}">Muokkaa</a>
+<h4>Kuvaus</h4>
+<p>
+    {% if aihe.kuvaus == null %}
+    <i>Ei vielä kuvausta. Lisää aiheelle kuvaus!</i>
+    {% else %}
+    {{aihe.kuvaus}}
+    {% endif %}
+</p>
+<a class="btn btn-default btn-sm" href="{{base_path}}/aihemuokkaus/{{aihe.aihe_id}}" 
+   title="Muokkaa kuvausta tai aiheen nimeä">Muokkaa</a>
+<br/>
+<br/>
+<br/>
+<a class="btn btn-default btn-sm" href="{{base_path}}/aiheet">Takaisin aihelistaukseen</a>
 {% endblock %}
