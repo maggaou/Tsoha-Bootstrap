@@ -16,11 +16,11 @@ class BaseController {
         return null;
     }
 
-    public static function check_logged_in() {
-        if (self::get_user_logged_in()) {
-            return true;
+    public static function check_logged_in($toiminto) {
+        if (!isset($_SESSION['user'])) {
+            Redirect::to('/login', array(
+                'virheet' => array($toiminto.' ei sallittu! Kirjaudu ensin sisään!')));
         }
-        return false;
     }
 
 }

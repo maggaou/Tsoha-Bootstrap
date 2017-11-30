@@ -2,7 +2,7 @@
 
 class Aihe extends BaseModel {
 
-    public $aihe_id, $nimi, $kuvaus;
+    public $aihe_id, $nimi, $kuvaus, $kayttaja, $kategoriat;
 
     public function __construct($attributes) {
         parent::__construct($attributes);
@@ -49,8 +49,9 @@ class Aihe extends BaseModel {
         $aiheet = array();
 
         foreach ($rows as $row) {
+            $id = $row['aihe_id'];
             $aiheet[] = new Aihe(array(
-                'aihe_id' => $row['aihe_id'],
+                'aihe_id' => $id,
                 'nimi' => $row['nimi'],
                 'kuvaus' => $row['kuvaus']
             ));
@@ -68,7 +69,7 @@ class Aihe extends BaseModel {
             $aihe = new Aihe(array(
                 'aihe_id' => $row['aihe_id'],
                 'nimi' => $row['nimi'],
-                'kuvaus' => $row['kuvaus'],
+                'kuvaus' => $row['kuvaus']
             ));
 
             return $aihe;
@@ -96,13 +97,37 @@ class Aihe extends BaseModel {
 
     public function save() {
         // Lisätään RETURNING id tietokantakyselymme loppuun, niin saamme lisätyn rivin id-sarakkeen arvon
-        $query = DB::connection()->prepare('INSERT INTO Aihe (nimi, kuvaus) VALUES (:nimi, :kuvaus) RETURNING aihe_id');
+        $query = DB::connection()->prepare('INSERT INTO Aihe (nimi, kuvaus)'
+                . ' VALUES (:nimi, :kuvaus)'
+                . ' RETURNING aihe_id');
         // Muistathan, että olion attribuuttiin pääse syntaksilla $this->attribuutin_nimi
         $query->execute(array('nimi' => $this->nimi, 'kuvaus' => $this->kuvaus));
         // Haetaan kyselyn tuottama rivi, joka sisältää lisätyn rivin id-sarakkeen arvon
         $row = $query->fetch();
         // Asetetaan lisätyn rivin id-sarakkeen arvo oliomme id-attribuutin arvoksi
         $this->aihe_id = $row['aihe_id'];
+        $query = DB::connection()->prepare('INSERT INTO KategoriaAihe'
+                . ' VALUES(:kategoria_id, :aihe_id)');
+        if ($this->kategoriat) {
+            foreach ($this->kategoriat as $kategoria_id) {
+                $query->execute(array(
+                    'kategoria_id' => $kategoria_id,
+                    'aihe_id' => $this->aihe_id
+                ));
+            }
+        }
+        // jos aiheelle on lisätty käyttäjä niin tämä muutos tallennetaan
+        $kayttaja = $this->kayttaja;
+        if ($kayttaja) {
+            $kayttaja_id = $kayttaja->user_id;
+            $query = DB::connection()->prepare(
+                    'UPDATE Käyttäjä SET aihe_id = :aihe_id'
+                    . ' WHERE käyttäjä_id = :id');
+            $query->execute(array(
+                'aihe_id' => $this->aihe_id,
+                'id' => $kayttaja_id
+            ));
+        }
     }
 
     public function paivita() {
@@ -116,9 +141,47 @@ class Aihe extends BaseModel {
     }
 
     public static function delete($aihe_id) {
-        Kint::dump('aiheen id on '.$aihe_id);
+        Kint::dump('aiheen id on ' . $aihe_id);
         $query = DB::connection()->prepare('DELETE FROM Aihe WHERE aihe_id = :id');
         $query->execute(array('id' => $aihe_id));
+    }
+
+    public static function aiheitaValittuYhteensa() {
+        $query = DB::connection()->query('SELECT COUNT(*) AS valittu_yht FROM Käyttäjä'
+                . ' WHERE aihe_id IS NOT NULL');
+        $query->execute();
+        $row = $query->fetch();
+        return $row['valittu_yht'];
+    }
+
+    public static function aihettaValittu($aihe_id) {
+        $query = DB::connection()->prepare('SELECT COUNT(*) AS valittu FROM Käyttäjä'
+                . ' WHERE aihe_id = :aihe_id');
+        $query->execute(array('aihe_id' => $aihe_id));
+        $row = $query->fetch();
+        return $row['valittu'];
+    }
+
+    public static function kategoriat($aihe_id) {
+        $query = DB::connection()->prepare(
+                'SELECT Kategoria.kategoria_id AS id FROM Aihe, Kategoria, KategoriaAihe'
+                . ' WHERE Kategoria.kategoria_id = KategoriaAihe.kategoria_id'
+                . ' AND Aihe.aihe_id = KategoriaAihe.aihe_id'
+                . ' AND Aihe.aihe_id = :id');
+        $query->execute(array('id' => $aihe_id));
+        $row = $query->fetch();
+        $kategoriat = array();
+        while ($row) {
+            $kategoriat[] = Kategoria::findById($row['id']);
+            $row = $query->fetch();
+        }
+        return $kategoriat;
+    }
+
+    public static function tyhjennaValinnat() {
+        $query = DB::connection()->query(
+                'UPDATE Käyttäjä SET aihe_id = NULL WHERE 1=1');
+        $query->execute();
     }
 
 }

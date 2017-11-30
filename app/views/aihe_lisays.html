@@ -15,9 +15,17 @@
         <textarea class="form-control" name = "kuvaus"  placeholder="anna tarkempi kuvaus (ei pakollinen)" >{{parametrit.kuvaus}}</textarea>
     </div>
     <div class="form-group">
+        <label>Kategoriat (ctrl-nappi pohjassa voit valita useampia)</label>
+        <select class="form-control" name="categories[]" multiple="">
+            {% for category in categories %}
+            <option value="{{category.kategoria_id}}">{{category.nimi}}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group">
         <button type="submit" class="btn btn-primary">Lisää aihe</button>
     </div>
 </form>
-<a class="btn btn-default btn-sm" href="{{base_path}}/aiheet">Takaisin aihelistaukseen</a>
+
 
 {% endblock %}

@@ -1,56 +1,70 @@
 <?php
-
+// yleiset osoitteet
 $routes->get('/', function() {
-    HelloWorldController::index();
+    MainController::paasivu();
 });
-
-$routes->post('/login', function() {
-    
-    UserController::handle_login();
+$routes->get('/tyhjennavalinnat', function() {
+    AiheController::tyhjennaKaikkiAiheValinnat();
 });
-
-
 $routes->get('/hiekkalaatikko', function() {
-    HelloWorldController::sandbox();
+    MainController::hiekkalaatikko();
 });
 
-$routes->get('/aihemuokkaus/:aihe_id', function($aihe_id) {
-    AiheController::naytaAihemuokkaus($aihe_id);
-});
-$routes->post('/aihemuokkaus/:aihe_id', function($aihe_id) {
-    AiheController::aihemuokkaus($aihe_id);
-});
-$routes->get('/aiheet', function() {
-    AiheController::listAll();
-});
-$routes->get('/kategoriamuokkaus', function() {
-    HelloWorldController::kategoriamuokkaus();
-});
-$routes->get('/kategoria', function() {
-    HelloWorldController::kategoria();
-});
-$routes->post('/aihelisays', function() {
-    AiheController::aihelisays();
-});
-$routes->get('/aihelisays', function() {
-    AiheController::naytaAihelisays();
-});
-$routes->get('/kategorialisays', function() {
-    HelloWorldController::kategorialisays();
-});
-$routes->get('/kategorialistaus', function() {
-    HelloWorldController::kategorialistaus();
-});
-$routes->get('/aihe/:aihe_id', function($aihe_id) {
-    AiheController::aihe($aihe_id);
-});
-$routes->get('/aihe/:aihe_id/poista', function($aihe_id) {
-    AiheController::poista($aihe_id);
+// kirjautuminen
+$routes->post('/login', function() {
+    UserController::handle_login();
 });
 $routes->get('/login', function() {
     UserController::login();
 });
 $routes->post('/login', function() {
-    
     UserController::handle_login();
 });
+$routes->post('/logout', function(){
+  UserController::logout();
+});
+
+
+// aiheisiin liittyvät osoitteet
+$routes->get('/aiheet', function() {
+    AiheController::listaaKaikkiAiheet();
+});
+$routes->post('/aihelisays', function() {
+    AiheController::suoritaAiheenLisays();
+});
+$routes->get('/aihelisays', function() {
+    AiheController::naytaAiheenLisays();
+});
+//$routes->get('/aihemuokkaus/:aihe_id', function($aihe_id) {
+//    AiheController::naytaAihemuokkaus($aihe_id);
+//});
+$routes->get('/aihe/:aihe_id', function($aihe_id) {
+    AiheController::naytaAihe($aihe_id);
+});
+//$routes->post('/aihemuokkaus/:aihe_id', function($aihe_id) {
+//    AiheController::aihemuokkaus($aihe_id);
+//});
+//$routes->get('/aihe/:aihe_id/poista', function($aihe_id) {
+//    AiheController::poista($aihe_id);
+//});
+
+$routes->get('/aihevalinta/:aihe_id', function($aihe_id){
+    AiheController::suoritaAihevalinta($aihe_id);
+});
+
+
+// kategorioihin liittyvät osoitteet
+$routes->get('/kategoria/:kategoria_id', function($kategoria_id) {
+    KategoriaController::naytaKategoria($kategoria_id);
+});
+$routes->post('/kategorialisays', function() {
+    KategoriaController::suoritaKategorianLisays();
+});
+$routes->get('/kategorialisays', function() {
+    KategoriaController::naytaKategorianLisays();
+});
+$routes->get('/kategoriat', function() {
+    KategoriaController::listaaKaikkiKategoriat();
+});
+
+

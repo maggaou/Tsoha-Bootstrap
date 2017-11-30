@@ -2,7 +2,7 @@
 
 class User extends BaseModel {
 
-    public $user_id, $name, $password, $asema;
+    public $user_id, $name, $password, $asema, $aihe;
 
     public function __construct($attributes) {
         parent::__construct($attributes);
@@ -18,7 +18,8 @@ class User extends BaseModel {
                 'user_id' => $row['käyttäjä_id'],
                 'name' => $row['nimi'],
                 'password' => $row['salasana'],
-                'asema' => $row['asema']
+                'asema' => $row['asema'],
+                'aihe' => Aihe::findById($row['aihe_id'])
             ));
             return $user;
         }
@@ -35,11 +36,22 @@ class User extends BaseModel {
                 'user_id' => $row['käyttäjä_id'],
                 'name' => $row['nimi'],
                 'password' => $row['salasana'],
-                'asema' => $row['asema']
+                'asema' => $row['asema'],
+                'aihe' => Aihe::findById($row['aihe_id'])
             ));
             return $user;
         }
         return null;
+    }
+
+    public function lisaaAihe($aihe) {
+        $query = DB::connection()->prepare(
+                'UPDATE Käyttäjä SET aihe_id = :aihe_id'
+                . ' WHERE käyttäjä_id = :id');
+        $query->execute(array(
+            'id' => $this->user_id,
+            'aihe_id' => $aihe->aihe_id
+        ));
     }
 
 }

@@ -14,13 +14,18 @@ class UserController extends BaseController {
             Kint::dump('Löydettiin käyttäjä: ' . $user->name . ':' . $user->password);
         }
         if (!$user) {
-            View::make('kirjautuminen.html', array('username' => $params['username'], 
-                'virheet' => array('Virhe: tunnus tai salasana väärin') ));
+            View::make('kirjautuminen.html', array('username' => $params['username'],
+                'virheet' => array('Virhe: tunnus tai salasana väärin')));
         } else {
             $_SESSION['user'] = $user->user_id;
 
             Redirect::to('/aiheet', array('viesti' => 'Tervetuloa takaisin ' . $user->name . '!'));
         }
+    }
+
+    public static function logout() {
+        $_SESSION['user'] = null;
+        Redirect::to('/login', array('message' => 'Olet kirjautunut ulos!'));
     }
 
 }

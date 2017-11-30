@@ -1,27 +1,54 @@
 {% extends "base.html" %}
 {% block content %}
-  <h1>Kategoria: Opiskelu</h1>
+<h1>Kategoria : {{kategoria.nimi}}</h1>
+<h4>
+    {% if aiheet %}
+        {% if kategoriaaValittu == 0 %}
+            <i>Tästä kategoriasta ei ole valittu aiheita</i>
+        {% elseif kategoriaaValittu == 1 %}
+            Tästä kategoriasta on tehty yksi aihevalinta
+        {% else %}
+            Tästä kategoriasta on tehty {{kategoriaaValittu}} aihevalintaa
+        {% endif %}
+    {% endif %}
+</h4>
+</br>
+</br>
+<!-- Listataan aiheet tähän -->
 
-  <p>
-    <a href="#" class="btn btn-success">Lisää aihe</a>
-  </p>
-
-  <table class="table table-striped table-bordered">
+<h4>Kategorian aiheet</h4>
+{% if aiheet %}
+<table class="table table-striped table-bordered">
     <thead>
-      <tr>
-        <th>Nimi</th>
-        <th>Valittu</th>
-        <th></th>
-      </tr>
+        <tr>
+            <th>Aihe</th>
+            <th>Valittu</th>
+        </tr>
     </thead>
 
     <tbody>
-      <!-- Listataan pelit tähän -->
-      <tr>
-        <td><a href="#">Muistilista</a></td>
-        <td>10</td>
-        <th><a class="btn btn-default btn-sm" href="#">Muokkaa</a></th>
-      </tr>
+        <!-- Listataan aiheet tähän -->
+        {% for aihe in aiheet %}
+        <tr>
+        <td><a href="{{base_path}}/aihe/{{aihe.aihe_id}}?mista=aiheet">
+                {{aihe.nimi}}
+        </td>
+        <td>{{aihettaValittu[aihe.aihe_id]}}</td>
+        </tr>
+        {% endfor %}
     </tbody>
-  </table>
+</table>
+{% else %}
+<p><i>Kategorialla ei ole vielä aiheita</i></p>
+{% endif %}
+
+<br>
+<br>
+<br>
+
+{% if user_logged_in.asema == 'vastuuhenkilö' and 1==2%}
+<a class="btn btn-default btn-sm" href="{{base_path}}/kategoriamuokkaus/{{kategoria.kategoria_id}}" 
+   title="Muokkaa kategorian nimeä">Muokkaa</a>
+{% endif %}
+
 {% endblock %}

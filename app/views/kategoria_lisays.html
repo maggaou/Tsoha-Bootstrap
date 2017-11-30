@@ -2,11 +2,13 @@
 {% block content %}
   <h1>Lisää uusi kategoria</h1>
 
-  <form>
+  <form action="{{base_path}}/kategorialisays" method="post">
 
     <div class="form-group">
       <label>Nimi</label>
-      <input type="text" class="form-control" value="Opiskelu">
+      <input type="text" class="form-control" name ="nimi" 
+             {% if nimi %} value="{{nimi}}" {% else %} 
+                placeholder="Anna kategorialle kuvaava nimi"{% endif %}>
     </div>
     <div class="form-group">
       <button type="submit" class="btn btn-primary">Lisää kategoria</button>
