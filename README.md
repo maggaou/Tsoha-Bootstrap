@@ -1,4 +1,16 @@
-# Vertaisarvioinnin voi tehdä viikolta 3!
+# Vertaisarvioinnin voi tehdä viikolta 5!
+    ##Testaus## 
+    * nollaa aihevalinnat kutsulla /tyhjennavalinnat
+    * voit tehdä aihevalintoja seuraaville käyttäjille
+```
+     käyttäjä_id | nimi  | salasana  |     asema     | aihe_id 
+-------------+-------+-----------+---------------+---------
+           3 | jussi | jussi1234 | vastuuhenkilö |        
+           2 | anna  | anna1234  | opiskelija    |       8
+           1 | jokke | jokke1234 | opiskelija    |       8
+           4 | elisa | elisa1234 | opiskelija    |       6
+(4 rows)
+```
 # Tietokantasovelluksen esittelysivu
 
 Työn aiheena on aihevalintalistaus opintotöille. Käyttäjälle näytetään lista aiheista
