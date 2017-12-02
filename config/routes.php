@@ -42,7 +42,7 @@ $routes->get('/aihe/:aihe_id', function($aihe_id) {
     AiheController::naytaAihe($aihe_id);
 });
 $routes->post('/aihemuokkaus/:aihe_id', function($aihe_id) {
-    AiheController::aihemuokkaus($aihe_id);
+    AiheController::suoritaAiheenMuokkaus($aihe_id);
 });
 $routes->get('/aihe/:aihe_id/poista', function($aihe_id) {
     AiheController::poista($aihe_id);

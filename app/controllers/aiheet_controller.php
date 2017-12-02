@@ -24,7 +24,7 @@ class AiheController extends BaseController {
 
     public static function naytaAiheenMuokkaus($aihe_id) {
         $aihe = Aihe::findById($aihe_id);
-        View::make('aihe_muokkaus.html', array('aihe' => $aihe));
+        View::make('aihe_muokkaus.html', array('aihe' => $aihe, 'categories' => Kategoria::all()));
     }
 
     public static function suoritaAiheenMuokkaus($aihe_id) {
@@ -35,10 +35,14 @@ class AiheController extends BaseController {
             $parametrit = $_POST;
             $aihe->nimi = trim($parametrit['nimi']);
             $aihe->kuvaus = trim($parametrit['kuvaus']);
+            $kategoriat = $parametrit['categories'];
+            Kint::dump($kategoriat);
+            $aihe->kategoriat = $kategoriat;
             $errors = $aihe->errors();
             if (count($errors) == 0) {
                 $aihe->paivita();
-                Redirect::to('/aihe/' . $aihe->aihe_id, array('viesti' => 'Aiheen muokkaus onnistui!'));
+                Redirect::to('/aihe/' . $aihe->aihe_id, 
+                        array('viesti' => 'Aiheen muokkaus onnistui!', 'mista' => 'aiheet'));
             } else {
                 View::make('aihe_muokkaus.html', array('virheet' => $errors, 'aihe' => $aihe));
             }
