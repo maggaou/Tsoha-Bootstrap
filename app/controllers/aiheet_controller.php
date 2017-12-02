@@ -35,9 +35,9 @@ class AiheController extends BaseController {
             $parametrit = $_POST;
             $aihe->nimi = trim($parametrit['nimi']);
             $aihe->kuvaus = trim($parametrit['kuvaus']);
-            $kategoriat = $parametrit['categories'];
-            Kint::dump($kategoriat);
-            $aihe->kategoriat = $kategoriat;
+            if (isset($parametrit['categories'])) {
+                $aihe->kategoriat = $parametrit['categories'];
+            }
             $errors = $aihe->errors();
             if (count($errors) == 0) {
                 $aihe->paivita();
