@@ -1,15 +1,30 @@
 {% extends "base.html" %}
 {% block content %}
-  <h1>Muokkaa kategoriaa opiskelu</h1>
+  <h1>Muokkaa kategoriaa {{kategoria.nimi}}</h1>
 
-  <form>
+  <form method="post" action="{{base_path}}/kategoriamuokkaus/{{kategoria.kategoria_id}}">
 
     <div class="form-group">
       <label>Nimi</label>
-      <input type="text" class="form-control" value="Opiskelu">
+      <input type="text" class="form-control" name="nimi" 
+             {% if input %}
+             value="{{input}}"
+             {% else %}
+             value="{{kategoria.nimi}}"
+             {% endif %}
+             >
     </div>
     <div class="form-group">
       <button type="submit" class="btn btn-primary">Tallenna muutokset</button>
     </div>
   </form>
+  <form method="GET" action="{{base_path}}/kategoria/{{kategoria.kategoria_id}}">
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Peru muokkaus</button>
+    </div>
+</form>
+
+<form method="GET" action="{{base_path}}/kategoria/{{kategoria.kategoria_id}}/poista" style="display: inline-block;">
+    <button type="submit" class="btn btn-danger" title="Poista kategoria tietokannasta!">Poista</button>
+</form>
 {% endblock %}

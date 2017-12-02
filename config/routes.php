@@ -66,5 +66,14 @@ $routes->get('/kategorialisays', function() {
 $routes->get('/kategoriat', function() {
     KategoriaController::listaaKaikkiKategoriat();
 });
+$routes->post('/kategoriamuokkaus/:kategoria_id', function($kategoria_id) {
+    KategoriaController::suoritaKategorianMuokkaus($kategoria_id);
+});
+$routes->get('/kategoriamuokkaus/:kategoria_id', function($kategoria_id) {
+    KategoriaController::naytaKategorianMuokkaus($kategoria_id);
+});
+$routes->get('/kategoria/:kategoria_id/poista', function($kategoria_id) {
+    KategoriaController::poista($kategoria_id);
+});
 
 

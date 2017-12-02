@@ -46,7 +46,7 @@
 <br>
 <br>
 
-{% if user_logged_in.asema == 'vastuuhenkilö' and 1==2%}
+{% if user_logged_in.asema == 'vastuuhenkilö' %}
 <a class="btn btn-default btn-sm" href="{{base_path}}/kategoriamuokkaus/{{kategoria.kategoria_id}}" 
    title="Muokkaa kategorian nimeä">Muokkaa</a>
 {% endif %}

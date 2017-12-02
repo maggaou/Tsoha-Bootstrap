@@ -1,7 +1,5 @@
 <?php
 
-// puuttuvat toiminnot: kategorian aiheiden muokkaus ja kategorian poistaminen
-
 class KategoriaController extends BaseController {
 
     public static function listaaKaikkiKategoriat() {
@@ -73,5 +71,41 @@ class KategoriaController extends BaseController {
     public static function naytaKategorianLisays() {
         View::make('kategoria_lisays.html');
     }
+    
+    public static function suoritaKategorianMuokkaus($kategoria_id) {
+        self::check_logged_in('Kategorian muokkaus');
+        $user = self::get_user_logged_in();
+        if ($user->asema == 'vastuuhenkilö') {
+            $kategoria = Kategoria::findById($kategoria_id);
+            $parametrit = $_POST;
+            $kategoria->nimi = $parametrit['nimi'];
+            $errors = $kategoria->errors();
+            if (count($errors) == 0) {
+                $kategoria->paivita();
+                Redirect::to('/kategoria/' . $kategoria->kategoria_id, array(
+                    'viesti' => 'Kategorian muokkaus onnistui!',
+                    'mista' => 'kategoriat'
+                ));
+            } else {
+                Redirect::to('/kategoriamuokkaus/'.$kategoria_id, 
+                        array('virheet' => $errors, 'input' => $parametrit['nimi']));
+            }
+        }
+        Redirect::to('/kategoriat', array('virheet' => array('Kategorian muokkaus ei sallittu')));
+    }
+    
+    public static function naytaKategorianMuokkaus($kategoria_id) {
+        $kategoria = Kategoria::findById($kategoria_id);
+        View::make('kategoria_muokkaus.html', array('kategoria' => $kategoria));
+    }
 
+    public static function poista($kategoria_id) {
+        self::check_logged_in('Kategorian poistaminen');
+        $user = self::get_user_logged_in();
+        if ($user->asema == 'vastuuhenkilö') {
+            Kategoria::delete($kategoria_id);
+            Redirect::to('/kategoriat', array('viesti' => 'Kategorian poistaminen onnistui!'));
+        }
+        Redirect::to('/kategoria/' . $kategoria_id, array('virheet' => array('Virhe: kategorian poistaminen ei sallittu!')));
+    }
 }

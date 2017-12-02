@@ -103,8 +103,8 @@ class Kategoria extends BaseModel {
 
     public function paivita() {
         $query = DB::connection()->prepare(
-                'UPDATE Kategoria SET nimi = :nimi WHERE kategoria_id = ' . $this->kategoria_id);
-        $query->execute(array('nimi' => $this->nimi, 'kuvaus' => $this->kuvaus));
+                'UPDATE Kategoria SET nimi = :nimi WHERE kategoria_id = :kategoria_id');
+        $query->execute(array('nimi' => $this->nimi, 'kategoria_id' => $this->kategoria_id));
     }
 
     public function getValidators() {
@@ -112,6 +112,11 @@ class Kategoria extends BaseModel {
     }
 
     public static function delete($kategoria_id) {
+        // poistetaan esiintymät KategoriaAihe-taulusta
+        $query = DB::connection()->prepare('DELETE FROM KategoriaAihe'
+                . ' WHERE kategoria_id = :id');
+        $query->execute(array('id' => $kategoria_id));
+        // poistetaan sitten Kategoria-taulusta
         $query = DB::connection()->prepare('DELETE FROM Kategoria WHERE kategoria_id = :id');
         $query->execute(array('id' => $kategoria_id));
     }
