@@ -46,15 +46,15 @@ class AiheController extends BaseController {
         }
     }
 
-//    public static function poista($aihe_id) {
-//        self::check_logged_in('Aiheen poistamAiheControllerinen');
-//        $user = self::get_user_logged_in();
-//        if ($user->asema == 'vastuuhenkilö') {
-//            Aihe::delete($aihe_id);
-//            Redirect::to('/aiheet', array('viesti' => 'Aiheen poistaminen onnistui!'));
-//        }
-//        Redirect::to('/aihe/' . $aihe_id, array('virheet' => array('Virhe: aiheen poistaminen ei sallittu!')));
-//    }
+    public static function poista($aihe_id) {
+        self::check_logged_in('Aiheen poistaminen');
+        $user = self::get_user_logged_in();
+        if ($user->asema == 'vastuuhenkilö') {
+            Aihe::delete($aihe_id);
+            Redirect::to('/aiheet', array('viesti' => 'Aiheen poistaminen onnistui!'));
+        }
+        Redirect::to('/aihe/' . $aihe_id, array('virheet' => array('Virhe: aiheen poistaminen ei sallittu!')));
+    }
 
     public static function naytaAihe($aihe_id) {
         $params = $_GET;

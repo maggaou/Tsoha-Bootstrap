@@ -141,7 +141,15 @@ class Aihe extends BaseModel {
     }
 
     public static function delete($aihe_id) {
-        Kint::dump('aiheen id on ' . $aihe_id);
+        // poistetaan ensin aiheen esiintymät KategoriaAihe-taulusta
+        $query = DB::connection()->prepare('DELETE FROM KategoriaAihe'
+                . ' WHERE aihe_id = :id');
+        $query->execute(array('id' => $aihe_id));
+        // sitten pitää poistaa aiheen valinnat käyttäjiltä
+        $query = DB::connection()->prepare('UPDATE Käyttäjä SET aihe_id = NULL '
+                . 'WHERE aihe_id = :id');
+        $query->execute(array('id' => $aihe_id));
+        // tehdään sitten poisto Aihe-taulusta
         $query = DB::connection()->prepare('DELETE FROM Aihe WHERE aihe_id = :id');
         $query->execute(array('id' => $aihe_id));
     }

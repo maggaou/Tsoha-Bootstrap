@@ -35,18 +35,18 @@ $routes->post('/aihelisays', function() {
 $routes->get('/aihelisays', function() {
     AiheController::naytaAiheenLisays();
 });
-//$routes->get('/aihemuokkaus/:aihe_id', function($aihe_id) {
-//    AiheController::naytaAihemuokkaus($aihe_id);
-//});
+$routes->get('/aihemuokkaus/:aihe_id', function($aihe_id) {
+    AiheController::naytaAiheenmuokkaus($aihe_id);
+});
 $routes->get('/aihe/:aihe_id', function($aihe_id) {
     AiheController::naytaAihe($aihe_id);
 });
-//$routes->post('/aihemuokkaus/:aihe_id', function($aihe_id) {
-//    AiheController::aihemuokkaus($aihe_id);
-//});
-//$routes->get('/aihe/:aihe_id/poista', function($aihe_id) {
-//    AiheController::poista($aihe_id);
-//});
+$routes->post('/aihemuokkaus/:aihe_id', function($aihe_id) {
+    AiheController::aihemuokkaus($aihe_id);
+});
+$routes->get('/aihe/:aihe_id/poista', function($aihe_id) {
+    AiheController::poista($aihe_id);
+});
 
 $routes->get('/aihevalinta/:aihe_id', function($aihe_id){
     AiheController::suoritaAihevalinta($aihe_id);
