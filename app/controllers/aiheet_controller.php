@@ -70,8 +70,8 @@ class AiheController extends BaseController {
         $valittuKategoriassa = array();
         foreach ($kategoriat as $kategoria) {
             $valittu = 0;
-            foreach (Kategoria::aiheet($kategoria->kategoria_id) as $aihe) {
-                $valittu = $valittu + Aihe::aihettaValittu($aihe->aihe_id);
+            foreach (Kategoria::aiheet($kategoria->kategoria_id) as $kategorianAihe) {
+                $valittu = $valittu + Aihe::aihettaValittu($kategorianAihe->aihe_id);
             }
             $valittuKategoriassa[$kategoria->kategoria_id] = $valittu;
         }
