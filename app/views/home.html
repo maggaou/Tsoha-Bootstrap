@@ -8,20 +8,10 @@
 <p>Aihevalintoja on tehty kaikkiaan {{valittu}}</p>
 {% endif %}
 
-{% if kayttaja %}
-<h4>Tietosi</h4>
-<p>nimi: {{kayttaja.name}}</p>
-<p>asema: {{kayttaja.asema}}</p>
-    {% if kayttaja.aihe%}
-        <p><b>Olet valinnut aiheeksesi <a href="{{base_path}}/aihe/{{kayttaja.aihe.aihe_id}}">
-                    {{kayttaja.aihe.nimi}}</a>. Ei muuta kuin hommiin!</b></p>
-    {% endif %}
-    
-    {% if kayttaja.asema == 'opiskelija' and kayttaja.aihe == null %}
-        <p><i>Et ole vielä valinnut itsellesi aihetta!</i></p>
-    {% endif %}
+<p>Kirjaudu sisään sivun oikeasta yläkulmasta niin voit valita itsellesi aiheen. 
+Kirjautumatta on mahdollista selata aiheita.</p>
 
-{% endif %}
+<a href="{{base_path}}/aiheet">Aiheisiin</a>
 
 
 {% endblock %}

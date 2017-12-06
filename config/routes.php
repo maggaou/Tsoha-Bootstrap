@@ -9,6 +9,9 @@ $routes->get('/tyhjennavalinnat', function() {
 $routes->get('/hiekkalaatikko', function() {
     MainController::hiekkalaatikko();
 });
+$routes->get('/kayttaja', function(){
+    UserController::naytaKayttaja();
+});
 
 // kirjautuminen
 $routes->post('/login', function() {

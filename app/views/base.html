@@ -39,7 +39,12 @@
                 <div class="collapse navbar-collapse" id="navigation">
                     <ul class="nav navbar-nav">
                         <!-- Navigaation linkit -->
-                        <li><a href="{{base_path}}">Etusivu</a></li>    
+                        <li><a href="{{base_path}}">Etusivu</a></li> 
+                        <li><a href="{{base_path}}/aiheet">Aiheet</a></li> 
+                        <li><a href="{{base_path}}/kategoriat">Kategoriat</a></li> 
+                        {% if user_logged_in %}
+                        <li><a href="{{base_path}}/kayttaja">Minun tiedot</a></li> 
+                        {% endif %}
                     </ul>
                     {% if user_logged_in %}
                     <form class="navbar-form navbar-right" method="post" action="{{base_path}}/logout">
@@ -90,10 +95,16 @@
         
         <br>
         {% if mista %}
-        <form action="{{base_path}}/{{mista}}" method="get">
+        <form action="{{base_path}}/aiheet" method="get">
             <div class="form-group">
                 <button type="submit" class="btn btn-primary" 
-                        title="Mene takaisin {{mista}}-sivulle">Takaisin</button>
+                        title="Mene aihelistaukseen">Kaikki aiheet</button>
+            </div>
+        </form>
+        <form action="{{base_path}}/kategoriat" method="get">
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary" 
+                        title="Mene kategorialistaukseen">Kaikki kategoriat</button>
             </div>
         </form>
         {% endif %}

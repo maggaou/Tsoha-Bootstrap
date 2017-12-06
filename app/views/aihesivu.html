@@ -43,8 +43,7 @@
 <p><i>Aiheella ei ole vielä kategorioita</i></p>
 {% endif %}
 {% if user_logged_in.asema == 'vastuuhenkilö' %}
-<a class="btn btn-default btn-sm" href="{{base_path}}/aihemuokkaus/{{aihe.aihe_id}}" 
-   title="Muokkaa kuvausta tai aiheen nimeä">Muokkaa</a>
+<a class="btn btn-default btn-sm" href="{{base_path}}/aihemuokkaus/{{aihe.aihe_id}}">Muokkaa</a>
 {% endif %}
 <br>
 <br>

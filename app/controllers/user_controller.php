@@ -6,6 +6,13 @@ class UserController extends BaseController {
         View::make('kirjautuminen.html');
     }
 
+    public static function naytaKayttaja() {
+        $kayttaja = self::get_user_logged_in();
+        View::make('kayttajasivu.html', array(
+            'kayttaja' => $kayttaja
+        ));
+    }
+
     public static function handle_login() {
         $params = $_POST;
 
@@ -16,10 +23,15 @@ class UserController extends BaseController {
         if (!$user) {
             View::make('kirjautuminen.html', array('username' => $params['username'],
                 'virheet' => array('Virhe: tunnus tai salasana väärin')));
+        }
+        $_SESSION['user'] = $user->user_id;
+        if ($user->aihe) {
+            Redirect::to('/kayttaja', array('viesti' => 'Kirjautuminen onnistui'));
+        }
+        if (!$user->asema == 'vastuuhenkilö') {
+            Redirect::to('/aiheet', array('viesti' => 'Tervetuloa valitsemaan itsellesi aihe ' . $user->name . '!'));
         } else {
-            $_SESSION['user'] = $user->user_id;
-
-            Redirect::to('/aiheet', array('viesti' => 'Tervetuloa takaisin ' . $user->name . '!'));
+            Redirect::to('/aiheet');
         }
     }
 
