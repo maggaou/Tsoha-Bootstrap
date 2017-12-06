@@ -28,10 +28,13 @@ class BaseModel {
         return $errors;
     }
 
-    public static function validoiMerkkijononPituus($merkkijono, $pituus, $nimi) {
+    public static function validoiMerkkijononPituus($merkkijono, $pituusMin, $pituusMaks, $nimi) {
         $errors = array();
-        if (strlen($merkkijono) < $pituus) {
+        if (strlen($merkkijono) < $pituusMin) {
             $errors[] = $nimi.' on tyhjä tai liian lyhyt';
+        }
+        if (strlen($merkkijono) > $pituusMaks) {
+            $errors[] = $nimi.' on liian pitkä';
         }
         return $errors;
     }

@@ -11,7 +11,7 @@ class Aihe extends BaseModel {
 
     public function validoiNimi() {
         // aiheen nimen pituuden tulee olla vähintään 3
-        return $this->validoiMerkkijononPituus($this->nimi, 3, 'nimi');
+        return $this->validoiMerkkijononPituus($this->nimi, 3,100, 'nimi');
     }
 
     public function validoiKuvaus() {
@@ -20,7 +20,7 @@ class Aihe extends BaseModel {
         if (strlen($this->kuvaus) == 0) {
             return $errors;
         }
-        return $this->validoiMerkkijononPituus($this->kuvaus, 3, 'kuvaus');
+        return $this->validoiMerkkijononPituus($this->kuvaus, 3,100, 'kuvaus');
     }
 
     public function validoiUniikkius() {

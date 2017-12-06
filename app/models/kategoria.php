@@ -11,7 +11,7 @@ class Kategoria extends BaseModel {
 
     public function validoiNimi() {
         // kategorian nimen pituuden tulee olla vähintään 3
-        return $this->validoiMerkkijononPituus($this->nimi, 3, 'nimi');
+        return $this->validoiMerkkijononPituus($this->nimi, 3,100, 'nimi');
     }
 
     public function validoiUniikkius() {
