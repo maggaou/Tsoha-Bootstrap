@@ -18,7 +18,10 @@
         <label>Kategoriat (ctrl-nappi pohjassa voit valita useampia)</label>
         <select class="form-control" name="categories[]" multiple="">
             {% for category in categories %}
-            <option value="{{category.kategoria_id}}">{{category.nimi}}</option>
+            <option value="{{category.kategoria_id}}" 
+                    {% if category.kategoria_id in parametrit.categories %} 
+                    selected="selected"
+                    {% endif %}>{{category.nimi}}</option>
             {% endfor %}
         </select>
     </div>

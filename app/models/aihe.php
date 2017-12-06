@@ -96,38 +96,43 @@ class Aihe extends BaseModel {
     }
 
     public function save() {
-        // Lisätään RETURNING id tietokantakyselymme loppuun, niin saamme lisätyn rivin id-sarakkeen arvon
         $query = DB::connection()->prepare('INSERT INTO Aihe (nimi, kuvaus)'
                 . ' VALUES (:nimi, :kuvaus)'
                 . ' RETURNING aihe_id');
-        // Muistathan, että olion attribuuttiin pääse syntaksilla $this->attribuutin_nimi
         $query->execute(array('nimi' => $this->nimi, 'kuvaus' => $this->kuvaus));
-        // Haetaan kyselyn tuottama rivi, joka sisältää lisätyn rivin id-sarakkeen arvon
         $row = $query->fetch();
-        // Asetetaan lisätyn rivin id-sarakkeen arvo oliomme id-attribuutin arvoksi
         $this->aihe_id = $row['aihe_id'];
+
+        // jos aiheelle on lisätty kategoriat
+        if ($this->kategoriat) {
+            $this->tallennaKategoriat();
+        }
+        // jos aiheelle on lisätty käyttäjä 
+        if ($this->kayttaja) {
+            $this->tallennaKayttaja();
+        }
+    }
+
+    public function tallennaKategoriat() {
         $query = DB::connection()->prepare('INSERT INTO KategoriaAihe'
                 . ' VALUES(:kategoria_id, :aihe_id)');
-        if ($this->kategoriat) {
-            foreach ($this->kategoriat as $kategoria_id) {
-                $query->execute(array(
-                    'kategoria_id' => $kategoria_id,
-                    'aihe_id' => $this->aihe_id
-                ));
-            }
-        }
-        // jos aiheelle on lisätty käyttäjä niin tämä muutos tallennetaan
-        $kayttaja = $this->kayttaja;
-        if ($kayttaja) {
-            $kayttaja_id = $kayttaja->user_id;
-            $query = DB::connection()->prepare(
-                    'UPDATE Käyttäjä SET aihe_id = :aihe_id'
-                    . ' WHERE käyttäjä_id = :id');
+        foreach ($this->kategoriat as $kategoria_id) {
             $query->execute(array(
-                'aihe_id' => $this->aihe_id,
-                'id' => $kayttaja_id
+                'kategoria_id' => $kategoria_id,
+                'aihe_id' => $this->aihe_id
             ));
         }
+    }
+
+    public function tallennaKayttaja() {
+        $kayttaja_id = $this->user_id;
+        $query = DB::connection()->prepare(
+                'UPDATE Käyttäjä SET aihe_id = :aihe_id'
+                . ' WHERE käyttäjä_id = :id');
+        $query->execute(array(
+            'aihe_id' => $this->aihe_id,
+            'id' => $kayttaja_id
+        ));
     }
 
     public function paivita() {
@@ -135,10 +140,10 @@ class Aihe extends BaseModel {
         $query = DB::connection()->prepare('UPDATE Aihe SET nimi = :nimi, kuvaus = :kuvaus WHERE aihe_id = ' . $this->aihe_id);
         $query->execute(array('nimi' => $this->nimi, 'kuvaus' => $this->kuvaus));
         // päivitetään aiheen kategoriat!
-                $query = DB::connection()->prepare('DELETE FROM KategoriaAihe'
+        $query = DB::connection()->prepare('DELETE FROM KategoriaAihe'
                 . ' WHERE aihe_id = :id');
         $query->execute(array('id' => $this->aihe_id));
-        
+
         $query = DB::connection()->prepare('INSERT INTO KategoriaAihe'
                 . ' VALUES(:kategoria_id, :aihe_id)');
         if ($this->kategoriat) {
@@ -149,7 +154,6 @@ class Aihe extends BaseModel {
                 ));
             }
         }
-        
     }
 
     public function getValidators() {
