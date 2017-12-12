@@ -6,19 +6,20 @@ class Kategoria extends BaseModel {
 
     public function __construct($attributes) {
         parent::__construct($attributes);
-        $this->validators = array('validoiNimi', 'validoiUniikkius');
+        $this->validators = array('validoiNimi', 'validoiUniikkius', 'validoiAiheet');
     }
 
     public function validoiNimi() {
         // kategorian nimen pituuden tulee olla vähintään 3
-        return $this->validoiMerkkijononPituus($this->nimi, 3,100, 'nimi');
+        return $this->validoiMerkkijononPituus($this->nimi, 3, 100, 'nimi');
     }
 
     public function validoiUniikkius() {
-        // jos aihe on tietokannassa valmiiksi
+        // jos kategoria on tietokannassa valmiiksi
         $errors = array();
         if ($this->kategoria_id) {
-            if (count(self::findByName($this->nimi)) > 1) {
+            if (!is_null($this->kategoria_id)) {
+                
                 $errors[] = 'Virhe: samalla nimellä löytyy jo kategoria';
             }
             return $errors;
@@ -28,6 +29,14 @@ class Kategoria extends BaseModel {
             }
             return $errors;
         }
+    }
+    
+    public function validoiAiheet() {
+        $errors = array();
+        if (in_array('tyhja', $this->aiheet) && count($this->aiheet) > 1) {
+            $errors[] = 'Virhe: valitsit ei mitään ja aiheen samaan aikaan';
+        }
+        return $errors;
     }
 
     public static function all() {
@@ -72,18 +81,17 @@ class Kategoria extends BaseModel {
     }
 
     public static function findByName($nimi) {
-        $query = DB::connection()->prepare('SELECT * FROM Kategoria WHERE LOWER(nimi) = :nimi');
+        $query = DB::connection()->prepare('SELECT * FROM Kategoria WHERE LOWER(nimi) = :nimi LIMIT 1');
         $query->execute(array('nimi' => strtolower($nimi)));
         $row = $query->fetch();
 
         $kategoriat = array();
-        while ($row) {
-            $kategoria = new Aihe(array(
+        if ($row) {
+            $kategoria = new Kategoria(array(
                 'kategoria_id' => $row['kategoria_id'],
                 'nimi' => $row['nimi'],
             ));
             $kategoriat[] = $kategoria;
-            $row = $query->fetch();
         }
         return $kategoriat;
     }
@@ -101,10 +109,20 @@ class Kategoria extends BaseModel {
         $this->kategoria_id = $row['kategoria_id'];
     }
 
-    public function paivita() {
+    public function paivita($kategorianVanhaNimi) { 
+        if ($this->nimi != $kategorianVanhaNimi) {
+            // löytyykö uudella nimellä kategoria entuudestaan
+            if (!is_null(Kategoria::findByName($this->nimi))) {
+                return 'Virhe: antamallasi nimellä löytyy jo kategoria!';
+            }
+        }
         $query = DB::connection()->prepare(
                 'UPDATE Kategoria SET nimi = :nimi WHERE kategoria_id = :kategoria_id');
         $query->execute(array('nimi' => $this->nimi, 'kategoria_id' => $this->kategoria_id));
+        $this->poistaAiheet();
+        if (!in_array('tyhja', $this->aiheet)) {
+            $this->lisaaAiheet();
+        }
     }
 
     public function getValidators() {
@@ -135,6 +153,23 @@ class Kategoria extends BaseModel {
             $row = $query->fetch();
         }
         return $aiheet;
+    }
+
+    public function lisaaAiheet() {
+        $query = DB::connection()->prepare(
+                'INSERT INTO KategoriaAihe VALUES (:kategoria_id, :aihe_id)');
+        foreach ($this->aiheet as $aihe_id) {
+            $query->execute(array(
+                'kategoria_id' => $this->kategoria_id,
+                'aihe_id' => $aihe_id
+            ));
+        }
+    }
+
+    public function poistaAiheet() {
+        $query = DB::connection()->prepare(
+                'DELETE FROM KategoriaAihe WHERE kategoria_id = :id');
+        $query->execute(array('id' => $this->kategoria_id));
     }
 
 }

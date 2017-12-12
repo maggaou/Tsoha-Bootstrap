@@ -67,36 +67,44 @@ class KategoriaController extends BaseController {
         }
         Redirect::to('/kategoriat', array('virheet' => array('Kategorian lisäys ei sallittu')));
     }
-    
+
     public static function naytaKategorianLisays() {
         View::make('kategoria_lisays.html');
     }
-    
+
     public static function suoritaKategorianMuokkaus($kategoria_id) {
         self::check_logged_in('Kategorian muokkaus');
         $user = self::get_user_logged_in();
         if ($user->asema == 'vastuuhenkilö') {
             $kategoria = Kategoria::findById($kategoria_id);
+            $kategoriaVanhaNimi = $kategoria->nimi;
             $parametrit = $_POST;
-            $kategoria->nimi = $parametrit['nimi'];
-            $errors = $kategoria->errors();
-            if (count($errors) == 0) {
-                $kategoria->paivita();
+            self::asetaKategorianParametrit($kategoria, $parametrit);
+            $virheet = $kategoria->errors();
+            if (count($virheet) == 0) {
+                $virheet[] = $kategoria->paivita($kategoriaVanhaNimi);
+            }
+            if (count($virheet) == 0) {
                 Redirect::to('/kategoria/' . $kategoria->kategoria_id, array(
                     'viesti' => 'Kategorian muokkaus onnistui!',
                     'mista' => 'kategoriat'
                 ));
             } else {
-                Redirect::to('/kategoriamuokkaus/'.$kategoria_id, 
-                        array('virheet' => $errors, 'input' => $parametrit['nimi']));
+                Redirect::to('/kategoriamuokkaus/' . $kategoria_id, array('virheet' => $kategoria->errors(), 'kategoria' => $kategoria));
             }
         }
         Redirect::to('/kategoriat', array('virheet' => array('Kategorian muokkaus ei sallittu')));
     }
-    
+
     public static function naytaKategorianMuokkaus($kategoria_id) {
         $kategoria = Kategoria::findById($kategoria_id);
-        View::make('kategoria_muokkaus.html', array('kategoria' => $kategoria));
+        $aiheet = Kategoria::aiheet($kategoria_id);
+        $aiheet_id = array();
+        foreach ($aiheet as $aihe) {
+            $aiheet_id[] = $aihe->aihe_id;
+        }
+        $kategoria->aiheet = $aiheet_id;
+        View::make('kategoria_muokkaus.html', array('kategoria' => $kategoria, 'aiheet' => Aihe::all()));
     }
 
     public static function poista($kategoria_id) {
@@ -108,4 +116,15 @@ class KategoriaController extends BaseController {
         }
         Redirect::to('/kategoria/' . $kategoria_id, array('virheet' => array('Virhe: kategorian poistaminen ei sallittu!')));
     }
+
+    public static function asetaKategorianParametrit($kategoria, $parametrit) {
+        if (isset($parametrit['nimi'])) {
+            $kategoria->nimi = $parametrit['nimi'];
+        }
+        if (isset($parametrit['aiheet'])) {
+            $aiheet = $parametrit['aiheet'];
+            $kategoria->aiheet = $parametrit['aiheet'];
+        }
+    }
+
 }

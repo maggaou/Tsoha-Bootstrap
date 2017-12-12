@@ -1,4 +1,5 @@
 <?php
+
 // puuttuvat toiminnot: aiheen kunnollinen muokkaus ja poisto
 class AiheController extends BaseController {
 
@@ -15,7 +16,7 @@ class AiheController extends BaseController {
             'valittu' => $valittu
         ));
     }
-    
+
     // tämä metodi on testausta varten!
     public static function tyhjennaKaikkiAiheValinnat() {
         Aihe::tyhjennaValinnat();
@@ -24,6 +25,12 @@ class AiheController extends BaseController {
 
     public static function naytaAiheenMuokkaus($aihe_id) {
         $aihe = Aihe::findById($aihe_id);
+        $kategoriat = Aihe::kategoriat($aihe_id);
+        $kategoriat_id = array();
+        foreach ($kategoriat as $kategoria) {
+            $kategoriat_id[] = $kategoria->kategoria_id;
+        }
+        $aihe->kategoriat = $kategoriat_id;
         View::make('aihe_muokkaus.html', array('aihe' => $aihe, 'categories' => Kategoria::all()));
     }
 
@@ -33,20 +40,34 @@ class AiheController extends BaseController {
         if ($user->asema == 'vastuuhenkilö') {
             $aihe = Aihe::findById($aihe_id);
             $parametrit = $_POST;
-            $aihe->nimi = trim($parametrit['nimi']);
-            $aihe->kuvaus = trim($parametrit['kuvaus']);
-            if (isset($parametrit['categories'])) {
-                $aihe->kategoriat = $parametrit['categories'];
-            }
+            self::asetaAiheenParametrit($aihe, $parametrit);
             $errors = $aihe->errors();
             if (count($errors) == 0) {
                 $aihe->paivita();
-                Redirect::to('/aihe/' . $aihe->aihe_id, 
-                        array('viesti' => 'Aiheen muokkaus onnistui!', 'mista' => 'aiheet'));
+                Redirect::to('/aihe/' . $aihe->aihe_id, array('viesti' => 'Aiheen muokkaus onnistui!', 'mista' => 'aiheet'));
             } else {
-                View::make('aihe_muokkaus.html', array('virheet' => $errors, 'aihe' => $aihe));
+                View::make('aihe_muokkaus.html', array(
+                    'virheet' => $errors,
+                    'aihe' => $aihe,
+                    'categories' => Kategoria::all()
+                ));
             }
             Redirect::to('/aihe/' . $aihe_id, array('virheet' => array('Virhe: aiheen muokkaus ei sallittu!')));
+        }
+    }
+
+    public static function asetaAiheenParametrit($aihe, $parametrit) {
+        if (isset($parametrit['nimi'])) {
+            $aihe->nimi = trim($parametrit['nimi']);
+        }
+        if (isset($parametrit['kuvaus'])) {
+            $aihe->kuvaus = trim($parametrit['kuvaus']);
+        }
+        if (isset($parametrit['categories'])) {
+            $kategoriat = $parametrit['categories'];
+            if (!in_array('tyhja', $kategoriat)) {
+                $aihe->kategoriat = $parametrit['categories'];
+            }
         }
     }
 
@@ -65,7 +86,7 @@ class AiheController extends BaseController {
         $user = self::get_user_logged_in();
         $aihe = Aihe::findById($aihe_id);
         $kategoriat = Aihe::kategoriat($aihe_id);
-        
+
         // selvitetään valinnat kategorioittain
         $valittuKategoriassa = array();
         foreach ($kategoriat as $kategoria) {
@@ -100,10 +121,14 @@ class AiheController extends BaseController {
         $user = self::get_user_logged_in();
         if ($user->asema == 'vastuuhenkilö') {
             $parametrit = $_POST;
+            $kategoriat = null;
+            if (isset($parametrit['categories'])) {
+                $kategoriat = $parametrit['categories'];
+            }
             $aihe = new Aihe(Array(
                 'nimi' => trim($parametrit['nimi']),
                 'kuvaus' => trim($parametrit['kuvaus']),
-                'kategoriat' => $parametrit['categories']
+                'kategoriat' => $kategoriat
             ));
             $errors = $aihe->errors();
             if (count($errors) == 0) {
@@ -114,7 +139,7 @@ class AiheController extends BaseController {
                 ));
             } else {
                 Redirect::to('/aihelisays', array(
-                    'virheet' => $errors, 
+                    'virheet' => $errors,
                     'parametrit' => $parametrit,
                 ));
             }

@@ -16,8 +16,12 @@
     <div class="form-group">
         <label>Kategoriat (ctrl-nappi pohjassa voit valita useampia)</label>
         <select class="form-control" name="categories[]" multiple="">
+            <option value="tyhja">Ei mitään</option>
             {% for category in categories %}
-            <option value="{{category.kategoria_id}}">{{category.nimi}}</option>
+            <option value="{{category.kategoria_id}}"
+                    {% if category.kategoria_id in aihe.kategoriat %} 
+                    selected="selected"
+                    {% endif %}>{{category.nimi}}</option>
             {% endfor %}
         </select>
     </div>
@@ -30,6 +34,7 @@
     <div class="form-group">
         <button type="submit" class="btn btn-primary">Peru muokkaus</button>
     </div>
+    <input type="hidden" name="mista" value="poo"/>
 </form>
 
 <form method="GET" action="{{base_path}}/aihe/{{aihe.aihe_id}}/poista" style="display: inline-block;">

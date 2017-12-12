@@ -31,7 +31,7 @@ class UserController extends BaseController {
         if (!$user->asema == 'vastuuhenkilö') {
             Redirect::to('/aiheet', array('viesti' => 'Tervetuloa valitsemaan itsellesi aihe ' . $user->name . '!'));
         } else {
-            Redirect::to('/aiheet');
+            Redirect::to('/aiheet', array('viesti' => 'Olet kirjautunut sisään vastuuhenkilönä'));
         }
     }
 

@@ -6,12 +6,12 @@ class Aihe extends BaseModel {
 
     public function __construct($attributes) {
         parent::__construct($attributes);
-        $this->validators = array('validoiNimi', 'validoiKuvaus', 'validoiUniikkius');
+        $this->validators = array('validoiNimi', 'validoiKuvaus', 'validoiUniikkius', 'validoiKategoriat');
     }
 
     public function validoiNimi() {
         // aiheen nimen pituuden tulee olla vähintään 3
-        return $this->validoiMerkkijononPituus($this->nimi, 3,100, 'nimi');
+        return $this->validoiMerkkijononPituus($this->nimi, 3, 100, 'nimi');
     }
 
     public function validoiKuvaus() {
@@ -20,7 +20,7 @@ class Aihe extends BaseModel {
         if (strlen($this->kuvaus) == 0) {
             return $errors;
         }
-        return $this->validoiMerkkijononPituus($this->kuvaus, 3,100, 'kuvaus');
+        return $this->validoiMerkkijononPituus($this->kuvaus, 3, 2000, 'kuvaus');
     }
 
     public function validoiUniikkius() {
@@ -58,6 +58,14 @@ class Aihe extends BaseModel {
         }
 
         return $aiheet;
+    }
+
+    public static function validoiKategoriat() {
+        $errors = array();
+        if (in_array('tyhja', $this->kategoriat) && count($this->kategoriat) > 1) {
+            $errors[] = 'Virhe: valitsit ei mitään ja kategorian samaan aikaan';
+        }
+        return $errors;
     }
 
     public static function findById($aihe_id) {

@@ -1,27 +1,34 @@
 {% extends "base.html" %}
 {% block content %}
-  <h1>Muokkaa kategoriaa {{kategoria.nimi}}</h1>
+<h1>Muokkaa kategoriaa {{kategoria.nimi}}</h1>
 
-  <form method="post" action="{{base_path}}/kategoriamuokkaus/{{kategoria.kategoria_id}}">
+<form method="post" action="{{base_path}}/kategoriamuokkaus/{{kategoria.kategoria_id}}">
 
     <div class="form-group">
-      <label>Nimi</label>
-      <input type="text" class="form-control" name="nimi" 
-             {% if input %}
-             value="{{input}}"
-             {% else %}
-             value="{{kategoria.nimi}}"
-             {% endif %}
-             >
+        <label>Nimi</label>
+        <input type="text" class="form-control" name="nimi" value="{{kategoria.nimi}}">
     </div>
     <div class="form-group">
-      <button type="submit" class="btn btn-primary">Tallenna muutokset</button>
+        <label>Aiheet (ctrl-nappi pohjassa voit valita useampia)</label>
+        <select class="form-control" name="aiheet[]" multiple="">
+            <option value="tyhja">Ei mitään</option>
+            {% for aihe in aiheet %}
+            <option value="{{aihe.aihe_id}}" 
+                    {% if aihe.aihe_id in kategoria.aiheet %} 
+                    selected="selected"
+                    {% endif %}>{{aihe.nimi}}</option>
+            {% endfor %}
+        </select>
     </div>
-  </form>
-  <form method="GET" action="{{base_path}}/kategoria/{{kategoria.kategoria_id}}">
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Tallenna muutokset</button>
+    </div>
+</form>
+<form method="GET" action="{{base_path}}/kategoria/{{kategoria.kategoria_id}}">
     <div class="form-group">
         <button type="submit" class="btn btn-primary">Peru muokkaus</button>
     </div>
+    <input type="hidden" name="mista" value="poo"/>
 </form>
 
 <form method="GET" action="{{base_path}}/kategoria/{{kategoria.kategoria_id}}/poista" style="display: inline-block;">
