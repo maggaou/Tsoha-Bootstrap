@@ -75,13 +75,11 @@ class Aihe extends BaseModel {
         $row = $query->fetch();
 
         if ($row) {
-            $aihe = new Aihe(array(
+            return new Aihe(array(
                 'aihe_id' => $row['aihe_id'],
                 'nimi' => $row['nimi'],
                 'kuvaus' => $row['kuvaus']
             ));
-
-            return $aihe;
         }
         return null;
     }
@@ -90,18 +88,14 @@ class Aihe extends BaseModel {
         $query = DB::connection()->prepare('SELECT * FROM Aihe WHERE LOWER(nimi) = :nimi');
         $query->execute(array('nimi' => strtolower($nimi)));
         $row = $query->fetch();
-
-        $aiheet = array();
-        while ($row) {
-            $aihe = new Aihe(array(
+        if ($row) {
+            return new Aihe(array(
                 'aihe_id' => $row['aihe_id'],
                 'nimi' => $row['nimi'],
                 'kuvaus' => $row['kuvaus'],
             ));
-            $aiheet[] = $aihe;
-            $row = $query->fetch();
         }
-        return $aiheet;
+        return null;
     }
 
     public function save() {

@@ -38,17 +38,24 @@ class AiheController extends BaseController {
         self::check_logged_in('Aiheen muokkaus');
         $user = self::get_user_logged_in();
         if ($user->asema == 'vastuuhenkilö') {
-            $aihe = Aihe::findById($aihe_id);
             $parametrit = $_POST;
-            self::asetaAiheenParametrit($aihe, $parametrit);
-            $errors = $aihe->errors();
-            if (count($errors) == 0) {
-                $aihe->paivita();
-                Redirect::to('/aihe/' . $aihe->aihe_id, array('viesti' => 'Aiheen muokkaus onnistui!', 'mista' => 'aiheet'));
+            $muokattavaAihe = Aihe::findById($aihe_id);
+            self::asetaAiheenParametrit($muokattavaAihe, $parametrit);
+            $loydettyAihe = Aihe::findByName($parametrit['nimi']);
+            $virheet = array();
+            $virheet = array_merge($virheet, $muokattavaAihe->validoiNimi());
+            $virheet = array_merge($virheet, $muokattavaAihe->validoiKuvaus());
+            $virheet = array_merge($virheet, $muokattavaAihe->validoiKategoriat());
+            if (!(is_null($loydettyAihe) || $loydettyAihe->aihe_id == $muokattavaAihe->aihe_id)) {
+                $virheet = array_merge($virheet, array("Virhe: nimellä löytyy toinen aihe"));
+            }
+            if (count($virheet) == 0) {
+                $muokattavaAihe->paivita();
+                Redirect::to('/aihe/' . $muokattavaAihe->aihe_id, array('viesti' => 'Aiheen muokkaus onnistui!', 'mista' => 'aiheet'));
             } else {
                 View::make('aihe_muokkaus.html', array(
-                    'virheet' => $errors,
-                    'aihe' => $aihe,
+                    'virheet' => $virheet,
+                    'aihe' => $muokattavaAihe,
                     'categories' => Kategoria::all()
                 ));
             }
@@ -64,11 +71,8 @@ class AiheController extends BaseController {
             $aihe->kuvaus = trim($parametrit['kuvaus']);
         }
         if (isset($parametrit['categories'])) {
-            $kategoriat = $parametrit['categories'];
-            if (!in_array('tyhja', $kategoriat)) {
-                $aihe->kategoriat = $parametrit['categories'];
-            }
-        }
+            $aihe->kategoriat = $parametrit['categories'];
+        } 
     }
 
     public static function poista($aihe_id) {

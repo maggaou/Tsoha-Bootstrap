@@ -24,7 +24,8 @@ class Kategoria extends BaseModel {
 
     public function validoiAiheet() {
         $errors = array();
-        if (in_array('tyhja', $this->aiheet) && count($this->aiheet) > 1) {
+        if (!is_null($this->aiheet)  && in_array('tyhja', $this->aiheet) 
+                && count($this->aiheet) > 1) {
             $errors[] = 'Virhe: valitsit ei mitään ja aiheen samaan aikaan';
         }
         return $errors;
