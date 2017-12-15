@@ -15,22 +15,13 @@ class Kategoria extends BaseModel {
     }
 
     public function validoiUniikkius() {
-        // jos kategoria on tietokannassa valmiiksi
         $errors = array();
-        if ($this->kategoria_id) {
-            if (!is_null($this->kategoria_id)) {
-                
-                $errors[] = 'Virhe: samalla nimellä löytyy jo kategoria';
-            }
-            return $errors;
-        } else {
-            if (count(self::findByName($this->nimi)) > 0) {
-                $errors[] = 'Virhe: samalla nimellä löytyy jo kategoria';
-            }
-            return $errors;
+        if (count(self::findByName($this->nimi)) > 0) {
+            $errors[] = 'Virhe: samalla nimellä löytyy jo kategoria';
         }
+        return $errors;
     }
-    
+
     public function validoiAiheet() {
         $errors = array();
         if (in_array('tyhja', $this->aiheet) && count($this->aiheet) > 1) {
@@ -109,7 +100,7 @@ class Kategoria extends BaseModel {
         $this->kategoria_id = $row['kategoria_id'];
     }
 
-    public function paivita() { 
+    public function paivita() {
 
         $query = DB::connection()->prepare(
                 'UPDATE Kategoria SET nimi = :nimi WHERE kategoria_id = :kategoria_id');

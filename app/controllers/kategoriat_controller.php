@@ -53,7 +53,9 @@ class KategoriaController extends BaseController {
             $kategoria = new Kategoria(Array(
                 'nimi' => trim($parametrit['nimi']),
             ));
-            $errors = $kategoria->errors();
+            $errors = array();
+            $errors = array_merge($errors, $kategoria->validoiNimi());
+            $errors = array_merge($errors, $kategoria->validoiUniikkius());
             if (count($errors) == 0) {
                 $kategoria->save();
                 Redirect::to('/kategoria/' . $kategoria->kategoria_id, array(
