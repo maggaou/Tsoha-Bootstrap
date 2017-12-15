@@ -76,21 +76,28 @@ class KategoriaController extends BaseController {
         self::check_logged_in('Kategorian muokkaus');
         $user = self::get_user_logged_in();
         if ($user->asema == 'vastuuhenkilö') {
-            $kategoria = Kategoria::findById($kategoria_id);
-            $kategoriaVanhaNimi = $kategoria->nimi;
             $parametrit = $_POST;
-            self::asetaKategorianParametrit($kategoria, $parametrit);
-            $virheet = $kategoria->errors();
-            if (count($virheet) == 0) {
-                $virheet[] = $kategoria->paivita($kategoriaVanhaNimi);
+            $muokattavaKategoria = Kategoria::findById($kategoria_id);
+            $loydettyKategoria = Kategoria::findByName($parametrit['nimi']);
+            self::asetaKategorianParametrit($muokattavaKategoria, $parametrit);
+            $virheet = array();
+            if (count($virhe = $muokattavaKategoria->validoiNimi()) != 0) {
+                $virheet = array_merge($virheet, $virhe);
             }
+            if (count($virhe = $muokattavaKategoria->validoiAiheet()) != 0) {
+                $virheet = array_merge($virheet, $virhe);
+            }
+            if (!(is_null($loydettyKategoria) || $muokattavaKategoria->kategoria_id == $loydettyKategoria->kategoria_id)) {
+                $virheet = array_merge($virheet, array("Virhe: nimellä löytyy toinen kategoria"));
+            }
+
             if (count($virheet) == 0) {
-                Redirect::to('/kategoria/' . $kategoria->kategoria_id, array(
-                    'viesti' => 'Kategorian muokkaus onnistui!',
-                    'mista' => 'kategoriat'
+                $muokattavaKategoria->paivita();
+                Redirect::to('/kategoria/' . $muokattavaKategoria->kategoria_id, array(
+                    'viesti' => 'Kategorian muokkaus onnistui!'
                 ));
             } else {
-                Redirect::to('/kategoriamuokkaus/' . $kategoria_id, array('virheet' => $kategoria->errors(), 'kategoria' => $kategoria));
+                Redirect::to('/kategoriamuokkaus/' . $kategoria_id, array('virheet' => $virheet, 'kategoria' => $muokattavaKategoria));
             }
         }
         Redirect::to('/kategoriat', array('virheet' => array('Kategorian muokkaus ei sallittu')));

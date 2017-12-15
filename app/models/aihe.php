@@ -60,9 +60,10 @@ class Aihe extends BaseModel {
         return $aiheet;
     }
 
-    public static function validoiKategoriat() {
+    public function validoiKategoriat() {
         $errors = array();
-        if (in_array('tyhja', $this->kategoriat) && count($this->kategoriat) > 1) {
+        if (!is_null($this->kategoriat)  && in_array('tyhja', $this->kategoriat) 
+                && count($this->kategoriat) > 1) {
             $errors[] = 'Virhe: valitsit ei mitään ja kategorian samaan aikaan';
         }
         return $errors;

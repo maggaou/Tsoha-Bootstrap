@@ -87,13 +87,13 @@ class Kategoria extends BaseModel {
 
         $kategoriat = array();
         if ($row) {
-            $kategoria = new Kategoria(array(
+            return new Kategoria(array(
                 'kategoria_id' => $row['kategoria_id'],
-                'nimi' => $row['nimi'],
+                'nimi' => $row['nimi']
             ));
-            $kategoriat[] = $kategoria;
+        } else {
+            return null;
         }
-        return $kategoriat;
     }
 
     public function save() {
@@ -109,13 +109,8 @@ class Kategoria extends BaseModel {
         $this->kategoria_id = $row['kategoria_id'];
     }
 
-    public function paivita($kategorianVanhaNimi) { 
-        if ($this->nimi != $kategorianVanhaNimi) {
-            // löytyykö uudella nimellä kategoria entuudestaan
-            if (!is_null(Kategoria::findByName($this->nimi))) {
-                return 'Virhe: antamallasi nimellä löytyy jo kategoria!';
-            }
-        }
+    public function paivita() { 
+
         $query = DB::connection()->prepare(
                 'UPDATE Kategoria SET nimi = :nimi WHERE kategoria_id = :kategoria_id');
         $query->execute(array('nimi' => $this->nimi, 'kategoria_id' => $this->kategoria_id));
